@@ -1,0 +1,18 @@
+#hash {
+  font-family: Inconsolata;
+  position: absolute;
+  bottom: 20%;
+  left: 23%;
+}
+
+.hashform {
+  width: 405px;
+  position: absolute;
+  top: 20%;
+  left: 35%;
+}
+
+label { width: 60px !important }
+form .input { margin-left: 80px !important }
+
+#encrypt { float: right; margin-right: 5px; }

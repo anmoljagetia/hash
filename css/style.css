@@ -1,8 +1,20 @@
 #hash {
   font-family: Inconsolata;
   position: absolute;
-  bottom: 20%;
+  bottom: 25%;
   left: 23%;
+}
+
+#hash .ruler {
+  margin-left: 2px;
+  color: #d0d0d0;
+  font-size: 16px;
+  line-height: 8px;
+  letter-spacing: 4px;
+}
+
+#hash .result {
+  font-size: 24px;
 }
 
 .hashform {

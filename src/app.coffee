@@ -1,15 +1,53 @@
-encrypt = ->
-  hostname = $("#hostname")[0].value
-  password = $("#password")[0].value
+class App
 
-  sha256 = new sjcl.hash.sha256
-  sha256.update hostname
-  sha256.update password
-  bits = sha256.finalize()
+  constructor: ->
+    $("#hash").hide()
+    @hostname = $("#hostname")
+    @hostnameParent = @hostname.parents "div.clearfix"
+    @password = $("#password")
+    @passwordParent = @password.parents "div.clearfix"
+    @sha256 = new sjcl.hash.sha256
 
-  hash = sjcl.codec.hex.fromBits bits
+    @addListeners()
 
-  $("#hash").html(hash)
+  getValues: ->
+    { hostname: @hostname.val(), password: @password.val() }
+
+  encrypt: ->
+    { hostname, password } = @getValues()
+    return @error() if !hostname or !password
+
+    @sha256.update hostname
+    @sha256.update password
+    bits = @sha256.finalize()
+
+    hash = sjcl.codec.hex.fromBits bits
+
+    @render hash
+
+  render: (hash) ->
+    $("#hash").show()
+    $("#hash h2.result").html(hash)
+
+  error: ->
+    { hostname, password } = @getValues()
+
+    if !hostname
+      @hostnameParent.addClass "error"
+
+    if !password
+      @passwordParent.addClass "error"
+
+  noerror: (el) ->
+    switch el
+      when @hostname then @hostnameParent.removeClass "error"
+      when @password then @passwordParent.removeClass "error"
+
+  addListeners: ->
+    @hostname.on "click", => @noerror @hostname
+    @password.on "click", => @noerror @password
+
 
 $.domReady ->
-  $("#encrypt").on "click", encrypt
+  app = new App
+  $("#encrypt").on "click", -> app.encrypt()

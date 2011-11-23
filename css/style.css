@@ -13,8 +13,19 @@
   letter-spacing: 4px;
 }
 
-#hash .result {
-  font-size: 24px;
+#hash .result { font-size: 24px }
+
+#bookmark {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+
+#bookmark p {
+  font-family: Inconsolata;
+  font-weight: 700;
+  letter-spacing: -1px;
+  font-size: 26px;
 }
 
 .hashform {

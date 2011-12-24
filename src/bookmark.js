@@ -3,13 +3,19 @@ var encrypt = function (str) {
 }
 var fields = document.querySelectorAll("input");
 var hostname = location.hostname;
+var d = document.createElement('div');
 var password = prompt("Enter a password");
+var num = /->(\d+-\d+)$/;
 var range;
 var r;
 var hash;
 if (password) {
   hash = encrypt(hostname + password);
-  range = prompt("(optional) Enter a range n-n eg: 1-32");
+  if (num.test(password)) {
+    range = num.exec(password)[1];
+  } else {
+    range = prompt("(optional) Enter a range n-n eg: 1-32");
+  }
   if (range) {
     r = range.split("-");
     hash = hash.substr(r[0], r[1]);

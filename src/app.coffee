@@ -22,8 +22,9 @@ class App
     bits = @sha256.finalize()
 
     hash = sjcl.codec.hex.fromBits bits
+    size = password.length * 2
 
-    @render hash
+    @render btoa(hash).substr 0 - size, size
 
   render: (hash) ->
     $("#hash").show()

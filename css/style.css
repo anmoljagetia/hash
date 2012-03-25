@@ -1,16 +1,10 @@
 #hash {
   font-family: Inconsolata;
-  position: absolute;
-  bottom: 25%;
-  left: 23%;
-}
-
-#hash .ruler {
-  margin-left: 2px;
-  color: #d0d0d0;
-  font-size: 16px;
-  line-height: 8px;
-  letter-spacing: 4px;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  top: 25%;
+  left: 0px;
 }
 
 #hash .result { font-size: 24px }
@@ -22,17 +16,24 @@
 }
 
 #bookmark p {
-  font-family: Inconsolata;
-  font-weight: 700;
-  letter-spacing: -1px;
+  font-family: 'Gochi Hand';
   font-size: 26px;
+}
+
+footer {
+  font-family: Inconsolata;
+  position: fixed;
+  font-size: 16px;
+  bottom: 20px;
+  right: 20px;
+  border-top: none !important;
 }
 
 .hashform {
   width: 405px;
-  position: absolute;
-  top: 20%;
-  left: 35%;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
 }
 
 label { width: 60px !important }

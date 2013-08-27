@@ -22,13 +22,13 @@ var sjcl = {
 
   /** @namespace Key exchange functions.  Right now only SRP is implemented. */
   keyexchange: {},
-  
+
   /** @namespace Block cipher modes of operation. */
   mode: {},
 
   /** @namespace Miscellaneous.  HMAC and PBKDF2. */
   misc: {},
-  
+
   /**
    * @namespace Bit array encoders and decoders.
    *
@@ -38,34 +38,7 @@ var sjcl = {
    * isn't always clear which direction is encoding and which is decoding,
    * the method names are "fromBits" and "toBits".
    */
-  codec: {},
-  
-  /** @namespace Exceptions. */
-  exception: {
-    /** @class Ciphertext is corrupt. */
-    corrupt: function(message) {
-      this.toString = function() { return "CORRUPT: "+this.message; };
-      this.message = message;
-    },
-    
-    /** @class Invalid parameter. */
-    invalid: function(message) {
-      this.toString = function() { return "INVALID: "+this.message; };
-      this.message = message;
-    },
-    
-    /** @class Bug or missing feature in SJCL. */
-    bug: function(message) {
-      this.toString = function() { return "BUG: "+this.message; };
-      this.message = message;
-    },
-
-    /** @class Something isn't ready. */
-    notReady: function(message) {
-      this.toString = function() { return "NOT READY: "+this.message; };
-      this.message = message;
-    }
-  }
+  codec: {}
 };
 /** @fileOverview Arrays of bits, encoded as arrays of Numbers.
  *
@@ -142,7 +115,7 @@ sjcl.bitArray = {
     if (a1.length === 0 || a2.length === 0) {
       return a1.concat(a2);
     }
-    
+
     var out, i, last = a1[a1.length-1], shift = sjcl.bitArray.getPartial(last);
     if (shift === 32) {
       return a1.concat(a2);
@@ -228,7 +201,7 @@ sjcl.bitArray = {
   _shiftRight: function (a, shift, carry, out) {
     var i, last2=0, shift2;
     if (out === undefined) { out = []; }
-    
+
     for (; shift >= 32; shift -= 32) {
       out.push(carry);
       carry = 0;
@@ -236,7 +209,7 @@ sjcl.bitArray = {
     if (shift === 0) {
       return out.concat(a);
     }
-    
+
     for (i=0; i<a.length; i++) {
       out.push(carry | a[i]>>>shift);
       carry = a[i] << (32-shift);
@@ -246,7 +219,7 @@ sjcl.bitArray = {
     out.push(sjcl.bitArray.partial(shift+shift2 & 31, (shift + shift2 > 32) ? carry : out.pop(),1));
     return out;
   },
-  
+
   /** xor a block of 4 words together.
    * @private
    */
@@ -260,22 +233,9 @@ sjcl.bitArray = {
  * @author Mike Hamburg
  * @author Dan Boneh
  */
- 
+
 /** @namespace UTF-8 strings */
 sjcl.codec.utf8String = {
-  /** Convert from a bitArray to a UTF-8 string. */
-  fromBits: function (arr) {
-    var out = "", bl = sjcl.bitArray.bitLength(arr), i, tmp;
-    for (i=0; i<bl/8; i++) {
-      if ((i&3) === 0) {
-        tmp = arr[i/4];
-      }
-      out += String.fromCharCode(tmp >>> 24);
-      tmp <<= 8;
-    }
-    return decodeURIComponent(escape(out));
-  },
-  
   /** Convert from a UTF-8 string to a bitArray. */
   toBits: function (str) {
     str = unescape(encodeURIComponent(str));
@@ -293,36 +253,6 @@ sjcl.codec.utf8String = {
     return out;
   }
 };
-/** @fileOverview Bit array codec implementations.
- *
- * @author Emily Stark
- * @author Mike Hamburg
- * @author Dan Boneh
- */
-
-/** @namespace Hexadecimal */
-sjcl.codec.hex = {
-  /** Convert from a bitArray to a hex string. */
-  fromBits: function (arr) {
-    var out = "", i, x;
-    for (i=0; i<arr.length; i++) {
-      out += ((arr[i]|0)+0xF00000000000).toString(16).substr(4);
-    }
-    return out.substr(0, sjcl.bitArray.bitLength(arr)/4);//.replace(/(.{8})/g, "$1 ");
-  },
-  /** Convert from a hex string to a bitArray. */
-  toBits: function (str) {
-    var i, out=[], len;
-    str = str.replace(/\s|0x/g, "");
-    len = str.length;
-    str = str + "00000000";
-    for (i=0; i<str.length; i+=8) {
-      out.push(parseInt(str.substr(i,8),16)^0);
-    }
-    return sjcl.bitArray.clamp(out, len*4);
-  }
-};
-
 /** @fileOverview Javascript SHA-256 implementation.
  *
  * An older version of this implementation is available in the public
@@ -370,7 +300,7 @@ sjcl.hash.sha256.prototype = {
    * @constant
    */
   blockSize: 512,
-   
+
   /**
    * Reset the hash state.
    * @return this
@@ -381,7 +311,7 @@ sjcl.hash.sha256.prototype = {
     this._length = 0;
     return this;
   },
-  
+
   /**
    * Input several words to the hash.
    * @param {bitArray|String} data the data to hash.
@@ -399,7 +329,7 @@ sjcl.hash.sha256.prototype = {
     }
     return this;
   },
-  
+
   /**
    * Complete hashing and output the hash value.
    * @return {bitArray} The hash value, an array of 16 big-endian words.
@@ -409,12 +339,12 @@ sjcl.hash.sha256.prototype = {
 
     // Round out and push the buffer
     b = sjcl.bitArray.concat(b, [sjcl.bitArray.partial(1,1)]);
-    
+
     // Round out the buffer to a multiple of 16 words, less the 2 length words.
     for (i = b.length + 2; i & 15; i++) {
       b.push(0);
     }
-    
+
     // append the length
     b.push(Math.floor(this._length / 0x100000000));
     b.push(this._length | 0);
@@ -435,7 +365,7 @@ sjcl.hash.sha256.prototype = {
   /*
   _init:[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],
   */
-  
+
   /**
    * The SHA-256 hash key, to be precomputed.
    * @private
@@ -470,7 +400,7 @@ sjcl.hash.sha256.prototype = {
           continue outer;
         }
       }
-      
+
       if (i<8) {
         this._init[i] = frac(Math.pow(prime, 1/2));
       }
@@ -478,13 +408,13 @@ sjcl.hash.sha256.prototype = {
       i++;
     }
   },
-  
+
   /**
    * Perform one cycle of SHA-256.
    * @param {bitArray} words one block of words.
    * @private
    */
-  _block:function (words) {  
+  _block:function (words) {
     var i, tmp, a, b,
       w = words.slice(0),
       h = this._h,
@@ -512,13 +442,13 @@ sjcl.hash.sha256.prototype = {
       } else {
         a   = w[(i+1 ) & 15];
         b   = w[(i+14) & 15];
-        tmp = w[i&15] = ((a>>>7  ^ a>>>18 ^ a>>>3  ^ a<<25 ^ a<<14) + 
+        tmp = w[i&15] = ((a>>>7  ^ a>>>18 ^ a>>>3  ^ a<<25 ^ a<<14) +
                          (b>>>17 ^ b>>>19 ^ b>>>10 ^ b<<15 ^ b<<13) +
                          w[i&15] + w[(i+9) & 15]) | 0;
       }
-      
+
       tmp = (tmp + h7 + (h4>>>6 ^ h4>>>11 ^ h4>>>25 ^ h4<<26 ^ h4<<21 ^ h4<<7) +  (h6 ^ h4&(h5^h6)) + k[i]); // | 0;
-      
+
       // shift register
       h7 = h6; h6 = h5; h5 = h4;
       h4 = h3 + tmp | 0;
@@ -538,4 +468,4 @@ sjcl.hash.sha256.prototype = {
   }
 };
 
-
+module.exports = sjcl

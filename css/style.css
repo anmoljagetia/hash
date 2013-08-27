@@ -1,21 +1,30 @@
-#hash {
-  font-family: Inconsolata;
-  text-align: center;
-  width: 100%;
-  position: fixed;
-  top: 25%;
-  left: 0px;
+body {
+  color: #1C140D;
 }
 
-#hash .result { font-size: 24px }
+.logo {
+  color: #5bb75b;
+}
 
-#bookmark {
+.hash {
+  color: #1C140D;
+  font-family: Inconsolata;
+  text-align: center;
+}
+
+.ruler {
+  color: #F2E9E1;
+  font-family: Inconsolata;
+  text-align: center;
+}
+
+.bookmark {
   position: absolute;
   top: 60px;
   left: 20px;
 }
 
-#bookmark p {
+.bookmark label {
   font-family: 'Gochi Hand';
   font-size: 26px;
 }
@@ -28,15 +37,3 @@ footer {
   right: 20px;
   border-top: none !important;
 }
-
-.hashform {
-  width: 405px;
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-}
-
-label { width: 60px !important }
-form .input { margin-left: 80px !important }
-
-#encrypt { float: right; margin-right: 5px; }

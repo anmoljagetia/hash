@@ -1,79 +1,56 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Gochi Hand' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/bootstrap.css">
-</head>
-<body style="padding-top: 40px">
-
-<div class="topbar">
-  <div class="topbar-inner">
+<html ng-app>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body ng-controller="JPasswordManager">
     <div class="container">
-      <a class="brand">hash</a>
-      <ul class="nav">
-        <li><a href="https://github.com/goatslacker/hash">View Source</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-
-    <div class="hashform">
-      <form action="javascript:;">
-      <fieldset class="well">
-        <div class="clearfix">
-          <label for="site">Site</label>
-          <div class="input">
-            <input id="hostname" name="site" type="text" class="xlarge" size="30" />
-            <span class="help-block">The hostname of the website you're visiting</span>
+      <h1 class="logo">JPasswordManager</h1>
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label class="col-lg-2 control-label">Bookmarklet</label>
+          <div class="col-lg-3">
+            <a class="btn btn-primary btn-sm" href="javascript:var s = document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='https://raw.github.com/goatslacker/hash/21ac2454e17aa633ce19fc85f56f9f68149f6cd3/build/bookmarklet.js';void(0);">Generate Password</a>
           </div>
         </div>
-
-        <div class="clearfix">
-          <label for="password">Password</label>
-          <div class="input">
-            <input id="password" name="password" type="password" class="xlarge" />
-            <span class="help-block">Your master password</span>
+        <div class="form-group">
+          <label class="col-lg-2 control-label">Hostname</label>
+          <div class="col-lg-3">
+            <input type="text" class="form-control" name="publicKey" ng-model="publicKey" />
           </div>
         </div>
-
-        <button class="btn primary" id="encrypt">Encrypt</button>
-      </fieldset>
+        <div class="form-group">
+          <label class="col-lg-2 control-label">Secret Phrase</label>
+          <div class="col-lg-3">
+            <input type="password" name="privateKey" class="form-control" ng-model="privateKey" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-2 control-label">Iterations</label>
+          <div class="col-lg-3">
+            <input type="number" name="iterations" class="form-control" ng-model="iterations" />
+          </div>
+        </div>
+        <button class="btn btn-success" ng-click="doHash()">Get Key</button>
+        <button class="btn" ng-click="clearHash()">Clear</button>
       </form>
-    </div> <!-- /hashform -->
-
-    <div id="hash">
-      <h2 class="result"></h2>
+      <h2 class="hash">{{hashText}}</h2>
+      <h2 class="ruler ng-cloak" ng-hide="hashText.length == 0">||||5||||0||||5||||0||||5||||0||</h2>
     </div>
+  </body>
+  <script type="application/javascript" src="build/hash.js"></script>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-27434498-1']);
+    _gaq.push(['_trackPageview']);
 
-    <div id="bookmark">
-      <p>Get the Bookmarklet!</p>
-      <a class="btn info" href="javascript:var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='https://raw.github.com/goatslacker/hash/21ac2454e17aa633ce19fc85f56f9f68149f6cd3/bookmarklet.js';void(0);">Generate Password</a>
-    </div> <!-- /bookmark -->
-
-  <a href="http://github.com/goatslacker/hash"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 10001" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
-
-  <footer>v2 <a href="https://github.com/goatslacker/hash/commit/21ac245">21ac245</a></footer>
-
-</div> <!-- /container -->
-</body>
-<script type="text/javascript" src="packages/jeesh/jeesh.min.js"></script>
-<script type="text/javascript" src="packages/sjcl/sjcl.js"></script>
-<script type="text/javascript" src="src/app.js"></script>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-27434498-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
 </html>

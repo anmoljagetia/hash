@@ -1,0 +1,20 @@
+{
+  "name": "jcrypt",
+  "version": "0.3.0",
+  "description": "Hashing with sha256",
+  "main": "bookmarklet.js",
+  "scripts": {
+    "prepublish": "browserify src/bookmark.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/goatslacker/hash.git"
+  },
+  "author": "Josh Perez <josh@goatslacker.com>",
+  "license": "BSD",
+  "gitHead": "1e13c29a9f3cae3992a35c7346c1941c5e4bbd7b",
+  "bugs": {
+    "url": "https://github.com/goatslacker/hash/issues"
+  }
+}
